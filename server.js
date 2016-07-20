@@ -15,18 +15,25 @@ function parseDate(value) {
     if(isNaN(value)) {
       var date = new Date(Date.parse(value));
     } else {
-      var date = new Date(parseInt(value*1000));
-      value = monthNames[date.getMonth()]+" "+date.getDate()+", "+date.getFullYear();
+      var date = new Date(parseInt(value)*1000);
     }
-    return (date) ? value : null;
+    return checkDate(date) ? monthNames[date.getMonth()]+" "+date.getDate()+", "+date.getFullYear() : null;
 }
 
 function parseUnix(value) {
     if(!isNaN(value)) {
-      var date = value;
+      var date = new Date(parseInt(value)*1000);
     } else {
       var date = new Date(Date.parse(value));
-      date = date.getMilliseconds()/1000;
     }
-    return (date) ? date : null;
+    return checkDate(date) ? date.getTime()/1000 : null;
+}
+
+function checkDate(date) {
+  if (Object.prototype.toString.call(date) === "[object Date]") {
+    return !isNaN(date.getTime());
+  }
+  else {
+    return false;
+  }
 }
