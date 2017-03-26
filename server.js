@@ -1,7 +1,17 @@
 var express = require('express');
+var fs = require('fs');
+
 var app = express();
 
-app.get('/:time', function(req, res) {
+app.get('/timestamp', function(req, res) {
+    res.writeHead(200, {
+        'content-type': 'text/html'
+    });
+    var fileStream = fs.createReadStream('./public/index.html');
+    fileStream.pipe(res);
+});
+
+app.get('/timestamp/:time', function(req, res) {
   var time = req.params.time;
   res.send({
     "unix": parseUnix(time),
@@ -9,8 +19,8 @@ app.get('/:time', function(req, res) {
   });
 });
 
-app.listen(8080, function() {
-  console.log('Timestamp Server listening on port 8080!');
+app.listen(3030, function() {
+  console.log('Timestamp Server listening on port 3030!');
 });
 
 function parseDate(value) {
